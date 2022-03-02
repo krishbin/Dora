@@ -45,6 +45,9 @@ add_executable(dora src/main.cpp
     common/texture.hpp
     common/controls.cpp
     common/controls.hpp
+    common/mesh.h
+    common/model.cpp
+    common/model.hpp
 
     src/VertexShader.glsl
     src/FragmentShader.glsl

@@ -11,10 +11,13 @@ int width=1024,height=768;
 #include <glm/gtx/transform.hpp>
 #include <common/shader.hpp>
 #include <common/controls.hpp>
+#include <common/mesh.h>
+#include <common/model.hpp>
 #include "vertexBuffer.hpp"
 #include "indexBuffer.hpp"
 #include "polygons.hpp"
 #include <common/filesystem.h>
+#include <stb_image.h>
 
 using namespace glm;
 
@@ -46,6 +49,8 @@ int main(){
 
   // Ensure we can capture the escape key being pressed below
   glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+  //hide cursor for testing
+  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
   glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
   // Enable depth test
@@ -59,6 +64,7 @@ int main(){
   glGenVertexArrays(1, &VertexArrayID);
   glBindVertexArray(VertexArrayID);
 
+  stbi_set_flip_vertically_on_load(false);
   GLuint programID = LoadShaders( FileSystem::getPath("src/VertexShader.glsl"), FileSystem::getPath("src/FragmentShader.glsl") );
 
   GLuint MatrixID = glGetUniformLocation(programID, "MVP");
@@ -66,6 +72,9 @@ int main(){
   cube c(1,1,1,2);
   vertexBuffer vbo(c.getVertexData(),24*sizeof(float));
   indexBuffer ebo(c.getIndexData(),36);
+  //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  
+  Model house(FileSystem::getPath("assets/house.obj"));
 
   do{
     //clear screen
@@ -76,20 +85,15 @@ int main(){
     computeMatricesFromInputs();
     glm::mat4 ProjectionMatrix = getProjectionMatrix();
     glm::mat4 ViewMatrix = getViewMatrix();
-
-    for(int i = -16; i < 15; ++i){
-    for(int j = -16; j < 15; ++j){
     glm::mat4 ModelMatrix = glm::mat4(1.0);
-    glm::mat4 translate = glm::translate(vec3(i*5+4,0,j*4+4));
-    glm::mat4 MVP = ProjectionMatrix * ViewMatrix * translate * ModelMatrix;
-		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-    glEnableVertexAttribArray(0);
-    vbo.bind();
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void*)0);
-    ebo.bind();
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-   }
-   }
+    for(int i = -20; i < 20; i=i+5){
+      for(int j = -20; j < 20; j=j+5){
+      glm::mat4 translate = glm::translate(vec3(i*5+4,0,j*4+4));
+      glm::mat4 MVP = ProjectionMatrix * ViewMatrix * translate * ModelMatrix;
+      glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+      house.Draw(programID);
+      }
+    }
 
     glfwSwapBuffers(window);
     glfwPollEvents();
