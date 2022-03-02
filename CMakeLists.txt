@@ -1,21 +1,30 @@
 cmake_minimum_required( VERSION 3.0 )
 project(Dora)
+
 set(OpenGL_GL_PREFERENCE GLVND)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(OpenGL REQUIRED)
+# Compile external dependencies 
+add_subdirectory (Libraries)
 
-find_package(GLEW REQUIRED)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/Libraries/rpavlik-cmake-modules-fe2273")
+include(CreateLaunchers)
+
 
 include_directories(
+    Libraries/glfw-3.1.2/include/
+	Libraries/glm-0.9.7.1/
+	Libraries/glew-1.13.0/include/
+	Libraries/assimp-3.0.1270/include/
 	.
 )
 
 set(ALL_LIBS
 	${OPENGL_LIBRARY}
-    ${GLEW_LIBRARIES}
 	glfw
+	GLEW_1130
 )
 
 add_definitions(
