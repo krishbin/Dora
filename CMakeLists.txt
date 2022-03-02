@@ -18,6 +18,7 @@ include_directories(
     Libraries/glfw-3.1.2/include/
 	Libraries/glm-0.9.7.1/
 	Libraries/glew-1.13.0/include/
+    Libraries/stb_image/src/
 	Libraries/assimp-3.0.1270/include/
     ${CMAKE_BINARY_DIR}/config
 	.
@@ -57,4 +58,6 @@ add_executable(dora src/main.cpp
 
 target_link_libraries(dora 
     ${ALL_LIBS}
+    assimp
+    STB_IMAGE
 )

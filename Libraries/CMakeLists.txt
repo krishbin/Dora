@@ -19,6 +19,7 @@ add_subdirectory (glfw-3.3)
 include_directories(
 	glfw-3.3/include/GLFW/
 	glew-1.13.0/include/
+	stb_image/src/
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -56,6 +57,9 @@ target_link_libraries(GLEW_1130
 	${EXTRA_LIBS}
 )
 
+### stb_image ###
+add_library(STB_IMAGE "stb_image/include/stb_image.c")
+SET_TARGET_PROPERTIES(STB_IMAGE PROPERTIES LINKER_LANGUAGE C)
 
 ### ANTTWEAKBAR ###
 
