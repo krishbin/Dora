@@ -14,6 +14,7 @@ int width=1024,height=768;
 #include "vertexBuffer.hpp"
 #include "indexBuffer.hpp"
 #include "polygons.hpp"
+#include <common/filesystem.h>
 
 using namespace glm;
 
@@ -58,7 +59,7 @@ int main(){
   glGenVertexArrays(1, &VertexArrayID);
   glBindVertexArray(VertexArrayID);
 
-  GLuint programID = LoadShaders( "../src/VertexShader.glsl", "../src/FragmentShader.glsl" );
+  GLuint programID = LoadShaders( FileSystem::getPath("src/VertexShader.glsl"), FileSystem::getPath("src/FragmentShader.glsl") );
 
   GLuint MatrixID = glGetUniformLocation(programID, "MVP");
 

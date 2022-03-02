@@ -12,12 +12,14 @@ add_subdirectory (Libraries)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/Libraries/rpavlik-cmake-modules-fe2273")
 include(CreateLaunchers)
 
+configure_file(config/root_directory.h.in config/root_directory.h)
 
 include_directories(
     Libraries/glfw-3.1.2/include/
 	Libraries/glm-0.9.7.1/
 	Libraries/glew-1.13.0/include/
 	Libraries/assimp-3.0.1270/include/
+    ${CMAKE_BINARY_DIR}/config
 	.
 )
 
