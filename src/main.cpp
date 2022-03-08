@@ -18,6 +18,7 @@ int width=1024,height=768;
 #include "polygons.hpp"
 #include <common/filesystem.h>
 #include <stb_image.h>
+#include "dijkstra.hpp"
 
 using namespace glm;
 
