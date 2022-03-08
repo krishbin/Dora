@@ -70,9 +70,6 @@ int main(){
 
   GLuint MatrixID = glGetUniformLocation(programID, "MVP");
 
-  cube c(1,1,1,2);
-  vertexBuffer vbo(c.getVertexData(),24*sizeof(float));
-  indexBuffer ebo(c.getIndexData(),36);
   //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   Model house(FileSystem::getPath("assets/house.obj"));
@@ -87,7 +84,7 @@ int main(){
 
   houseModelTranslation.push_back(vec3(-30,0,50+offseth));
   houseModelTranslation.push_back(vec3(30+offsetv,0,50));
-  houseModelTranslation.push_back(vec3(0+offsetv,0,50+2*offseth));
+  houseModelTranslation.push_back(vec3(0,0,50));
 
   houseModelTranslation.push_back(vec3(-30,0,80+offseth));
   houseModelTranslation.push_back(vec3(30+offsetv,0,80));
@@ -102,12 +99,44 @@ int main(){
 
   houseModelRotation.push_back(-90.0f);
   houseModelRotation.push_back(90.0f);
-  houseModelRotation.push_back(180.0f);
+  houseModelRotation.push_back(0.0f);
 
   houseModelRotation.push_back(-90.0f);
   houseModelRotation.push_back(90.0f);
 
   houseModelRotation.push_back(0);
+
+  vec3 vertexLocation[] = {
+    vec3(0,0,0),
+    vec3(-30+10,0,20),
+    vec3(-30+10,0,50),
+    vec3(-30+10,0,80),
+    vec3(0,0,100),
+    vec3(30,0,80-5),
+    vec3(30,0,50-5),
+    vec3(30,0,20-5),
+    vec3(0,0,50),
+  };
+
+  Graph simpleGraph(9,vertexLocation);
+  simpleGraph.addEdge(0, 1, 4);
+  simpleGraph.addEdge(0, 7, 8);
+  simpleGraph.addEdge(1, 2, 8);
+  simpleGraph.addEdge(1, 7, 11);
+  simpleGraph.addEdge(2, 3, 7);
+  simpleGraph.addEdge(2, 8, 2);
+  simpleGraph.addEdge(2, 5, 4);
+  simpleGraph.addEdge(3, 4, 9);
+  simpleGraph.addEdge(3, 5, 14);
+  simpleGraph.addEdge(4, 5, 10);
+  simpleGraph.addEdge(5, 6, 2);
+  simpleGraph.addEdge(6, 7, 1);
+  simpleGraph.addEdge(6, 8, 6);
+  simpleGraph.addEdge(7, 8, 7);
+
+  /*
+   * vertex 1: 0,0,0
+   */
   do{
     //clear screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -128,6 +157,9 @@ int main(){
       glUniformMatrix4fv(MatrixID,1,GL_FALSE,&MVP[0][0]);
       house.Draw(programID);
     }
+    glm::mat4 pvm = ProjectionMatrix * ViewMatrix * ModelMatrix;
+    simpleGraph.drawShortestPath(0,3,pvm);
+    simpleGraph.drawAllNodes(pvm);
 
     glfwSwapBuffers(window);
     glfwPollEvents();

@@ -1,5 +1,6 @@
 #include "polygons.hpp"
 #include<glm/glm.hpp>
+#include<GL/glew.h>
 #include<vector>
 
 using namespace glm;
@@ -15,7 +16,6 @@ class Line {
     vec3 lineColor;
 public:
     Line(vec3 start, vec3 end) {
-
         startPoint = start;
         endPoint = end;
         lineColor = vec3(1, 1, 1);
@@ -24,9 +24,10 @@ public:
         const char* vertexShaderSource = "#version 330 core\n"
             "layout (location = 0) in vec3 aPos;\n"
             "uniform mat4 MVP;\n"
+            "uniform mat4 pvm;\n"
             "void main()\n"
             "{\n"
-            "   gl_Position = MVP * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+            "   gl_Position = MVP * pvm * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
             "}\0";
         const char* fragmentShaderSource = "#version 330 core\n"
             "out vec4 FragColor;\n"
@@ -89,9 +90,10 @@ public:
         return 1;
     }
 
-    int draw() {
+    int draw(glm::mat4 &pvm) {
         glUseProgram(shaderProgram);
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "MVP"), 1, GL_FALSE, &MVP[0][0]);
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "pvm"), 1, GL_FALSE, &pvm[0][0]);
         glUniform3fv(glGetUniformLocation(shaderProgram, "color"), 1, &lineColor[0]);
 
         glBindVertexArray(VAO);
@@ -106,48 +108,4 @@ public:
         glDeleteBuffers(1, &VBO);
         glDeleteProgram(shaderProgram);
     }
-};
-
-
-cube::cube(GLfloat x, GLfloat y, GLfloat z,GLfloat edgelength){
-  GLfloat halfLength = edgelength/2;
-  data[0] =  x - halfLength;
-  data[1] =  y + halfLength;
-  data[2] =  z + halfLength;
-
-  data[3] =  x + halfLength;
-  data[4] =  y + halfLength;
-  data[5] =  z + halfLength;
-
-  data[6] =  x - halfLength;
-  data[7] =  y - halfLength;
-  data[8] =  z + halfLength;
-
-  data[9] =  x + halfLength;
-  data[10] = y - halfLength;
-  data[11] = z + halfLength;
-
-  data[12] = x - halfLength;
-  data[13] = y + halfLength;
-  data[14] = z - halfLength;
-
-  data[15] = x + halfLength;
-  data[16] = y + halfLength;
-  data[17] = z - halfLength;
-
-  data[18] = x - halfLength;
-  data[19] = y - halfLength;
-  data[20] = z - halfLength;
-
-  data[21] = x + halfLength;
-  data[22] = y - halfLength;
-  data[23] = z - halfLength;
-};
-cube::~cube(){
-};
-GLfloat* cube::getVertexData(){
-  return data;
-};
-GLuint* cube::getIndexData(){
-  return indices;
 };

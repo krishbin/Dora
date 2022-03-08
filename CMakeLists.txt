@@ -56,7 +56,6 @@ add_executable(dora src/main.cpp
     src/indexBuffer.cpp
     src/indexBuffer.hpp
     src/polygons.cpp
-    src/polygons.hpp
     src/dijkstra.cpp
     src/dijkstra.hpp
 )
