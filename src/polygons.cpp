@@ -97,13 +97,12 @@ public:
         glUniform3fv(glGetUniformLocation(shaderProgram, "color"), 1, &lineColor[0]);
 
         glBindVertexArray(VAO);
-        glLineWidth(10.0f);
+        glLineWidth(8.0f);
         glDrawArrays(GL_LINES, 0, 2);
         return 1;
     }
 
     ~Line() {
-
         glDeleteVertexArrays(1, &VAO);
         glDeleteBuffers(1, &VBO);
         glDeleteProgram(shaderProgram);

@@ -24,6 +24,10 @@ using namespace glm;
 
 int main(){
   //initialize glfw
+  int a[2];
+  std::cout<<"Enter any two vertex to find the shortest path of:"<<std::endl;
+  std::cin>>a[0];
+  std::cin>>a[1];
   glewExperimental = true; // Needed for core profile
   if( !glfwInit() )
   {
@@ -77,19 +81,19 @@ int main(){
   int offseth = -10;
   int offsetv = 10;
   vector<vec3> houseModelTranslation;
-  houseModelTranslation.push_back(vec3(0+offsetv,0,0+offseth));
+  houseModelTranslation.push_back(vec3(10+offsetv,0,0+offseth));//0
 
-  houseModelTranslation.push_back(vec3(-30,0,20+offseth));
-  houseModelTranslation.push_back(vec3(30+offsetv,0,20));
+  houseModelTranslation.push_back(vec3(-35,0,20+offseth));//1
+  houseModelTranslation.push_back(vec3(35+offsetv,0,20));//5
 
-  houseModelTranslation.push_back(vec3(-30,0,50+offseth));
-  houseModelTranslation.push_back(vec3(30+offsetv,0,50));
+  houseModelTranslation.push_back(vec3(-35,0,50+offseth));//2
+  houseModelTranslation.push_back(vec3(35+offsetv,0,50));//6
   houseModelTranslation.push_back(vec3(0,0,50));
 
-  houseModelTranslation.push_back(vec3(-30,0,80+offseth));
-  houseModelTranslation.push_back(vec3(30+offsetv,0,80));
+  houseModelTranslation.push_back(vec3(-45,0,80+offseth));//3
+  houseModelTranslation.push_back(vec3(45+offsetv,0,80));//7
 
-  houseModelTranslation.push_back(vec3(0,0,100));
+  houseModelTranslation.push_back(vec3(10,0,100+offsetv));//4
 
   vector<float> houseModelRotation;
   houseModelRotation.push_back(180.0f);
@@ -107,15 +111,15 @@ int main(){
   houseModelRotation.push_back(0);
 
   vec3 vertexLocation[] = {
-    vec3(0,0,0),
-    vec3(-30+10,0,20),
-    vec3(-30+10,0,50),
-    vec3(-30+10,0,80),
-    vec3(0,0,100),
-    vec3(30,0,80-5),
-    vec3(30,0,50-5),
-    vec3(30,0,20-5),
-    vec3(0,0,50),
+    vec3(10,0,0),
+    vec3(-35+10,0,20),
+    vec3(-35+10,0,50),
+    vec3(-45+10,0,80),
+    vec3(10+5,0,100),
+    vec3(45,0,80-5),
+    vec3(35,0,50-5),
+    vec3(35,0,20-5),
+    vec3(8,0,38),
   };
 
   Graph simpleGraph(9,vertexLocation);
@@ -158,7 +162,7 @@ int main(){
       house.Draw(programID);
     }
     glm::mat4 pvm = ProjectionMatrix * ViewMatrix * ModelMatrix;
-    simpleGraph.drawShortestPath(0,3,pvm);
+    simpleGraph.drawShortestPath(a[0],a[1],pvm);
     simpleGraph.drawAllNodes(pvm);
 
     glfwSwapBuffers(window);
