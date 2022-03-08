@@ -74,9 +74,40 @@ int main(){
   vertexBuffer vbo(c.getVertexData(),24*sizeof(float));
   indexBuffer ebo(c.getIndexData(),36);
   //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  
+
   Model house(FileSystem::getPath("assets/house.obj"));
 
+  int offseth = -10;
+  int offsetv = 10;
+  vector<vec3> houseModelTranslation;
+  houseModelTranslation.push_back(vec3(0+offsetv,0,0+offseth));
+
+  houseModelTranslation.push_back(vec3(-30,0,20+offseth));
+  houseModelTranslation.push_back(vec3(30+offsetv,0,20));
+
+  houseModelTranslation.push_back(vec3(-30,0,50+offseth));
+  houseModelTranslation.push_back(vec3(30+offsetv,0,50));
+  houseModelTranslation.push_back(vec3(0+offsetv,0,50+2*offseth));
+
+  houseModelTranslation.push_back(vec3(-30,0,80+offseth));
+  houseModelTranslation.push_back(vec3(30+offsetv,0,80));
+
+  houseModelTranslation.push_back(vec3(0,0,100));
+
+  vector<float> houseModelRotation;
+  houseModelRotation.push_back(180.0f);
+
+  houseModelRotation.push_back(-90.0f);
+  houseModelRotation.push_back(90.0f);
+
+  houseModelRotation.push_back(-90.0f);
+  houseModelRotation.push_back(90.0f);
+  houseModelRotation.push_back(180.0f);
+
+  houseModelRotation.push_back(-90.0f);
+  houseModelRotation.push_back(90.0f);
+
+  houseModelRotation.push_back(0);
   do{
     //clear screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -87,13 +118,15 @@ int main(){
     glm::mat4 ProjectionMatrix = getProjectionMatrix();
     glm::mat4 ViewMatrix = getViewMatrix();
     glm::mat4 ModelMatrix = glm::mat4(1.0);
-    for(int i = -20; i < 20; i=i+5){
-      for(int j = -20; j < 20; j=j+5){
-      glm::mat4 translate = glm::translate(vec3(i*5+4,0,j*4+4));
-      glm::mat4 MVP = ProjectionMatrix * ViewMatrix * translate * ModelMatrix;
-      glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+
+    vector<vec3>::iterator it;
+    vector<float>::iterator itr;
+    for(it = houseModelTranslation.begin(),itr = houseModelRotation.begin(); it != houseModelTranslation.end(); ++it,++itr){
+      glm::mat4 translate = glm::translate(*it);
+      glm::mat4 rotate = glm::rotate(glm::radians(*itr),vec3(0,1,0));
+      glm::mat4 MVP = ProjectionMatrix * ViewMatrix * translate * rotate * ModelMatrix;
+      glUniformMatrix4fv(MatrixID,1,GL_FALSE,&MVP[0][0]);
       house.Draw(programID);
-      }
     }
 
     glfwSwapBuffers(window);
@@ -101,7 +134,7 @@ int main(){
 
   } // Check if the ESC key was pressed or the window was closed
   while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
-      glfwWindowShouldClose(window) == 0 );
+  glfwWindowShouldClose(window) == 0 );
   glDeleteProgram(programID);
   glDeleteVertexArrays(1, &VertexArrayID);
   // Close OpenGL window and terminate GLFW

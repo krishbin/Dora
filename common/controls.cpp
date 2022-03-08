@@ -18,11 +18,11 @@ glm::mat4 getViewMatrix(){
 glm::mat4 getProjectionMatrix(){
 	return ProjectionMatrix;
 }
-glm::vec3 position = glm::vec3( 0, 10, 10 );
+glm::vec3 position = glm::vec3( 0, 15, -30 );
 // horizontal angle : toward -Z
-float horizontalAngle = 3.14f;
+float horizontalAngle = 0.0f;
 // vertical angle : 0, look at the horizon
-float verticalAngle = 0.0f;
+float verticalAngle = -0.2f;
 // Initial Field of View
 float initialFoV = 55.0f;
 
@@ -36,10 +36,10 @@ void computeMatricesFromInputs(){
     float deltaTime = float(currentTime - lastTime);
     double xpos, ypos;
     glfwGetCursorPos(window,&xpos, &ypos);
-    glfwSetCursorPos(window,1024/2, 768/2);// Compute new orientation
+    glfwSetCursorPos(window,1024/2.0, 768/2.0);// Compute new orientation
 
-    horizontalAngle += mouseSpeed * deltaTime * float(1024/2 - xpos );
-    verticalAngle   += mouseSpeed * deltaTime * float( 768/2 - ypos );
+    horizontalAngle += mouseSpeed * deltaTime * float(1024/2.0 - xpos );
+    verticalAngle   += mouseSpeed * deltaTime * float( 768/2.0 - ypos );
     if(verticalAngle < -1.0f) verticalAngle = -1.0f;
     if(verticalAngle > 1.0f) verticalAngle = 1.0f;
 
