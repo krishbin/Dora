@@ -23,7 +23,7 @@ queue<int> Graph::shortestPath(int src, int dest) {
   queue<int> path;
 
   path.push(src);
-  int parent[V];
+  int *parent = new int[V];
   for (int i = 0; i < V; ++i) {
     parent[i] = -1;
   }
